@@ -11,14 +11,22 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 public class MovieDetailActivity extends AppCompatActivity {
+	
     public static final String EXTRA_MOVIE = "movie";
     private static final String BASE_URL_IMAGES = "http://image.tmdb.org/t/p/w500";
     private MovieInfo mMovie;
+	
+	@Bind(R.id.backdrop)
     ImageView backdrop;
+	@Bind(R.id.movie_poster)
     ImageView poster;
+	@Bind(R.id.movie_title)
     TextView title;
+	@Bind(R.id.movie_description)
     TextView description;
+	@Bind(R.id.movie_user_rating)
     TextView userRating;
+	@Bind(R.id.movie_release_date)
     TextView releaseDate;
 
     @Override
@@ -35,17 +43,10 @@ public class MovieDetailActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         CollapsingToolbarLayout toolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
         toolbarLayout.setTitle(mMovie.title);
-
-        backdrop = (ImageView) findViewById(R.id.backdrop);
-        title = (TextView) findViewById(R.id.movie_title);
-        description = (TextView) findViewById(R.id.movie_description);
-        poster = (ImageView) findViewById(R.id.movie_poster);
-        userRating = (TextView) findViewById(R.id.movie_user_rating);
-        releaseDate = (TextView) findViewById(R.id.movie_release_date);
-
+		Butterknife.bind(this);
+        
         title.setText(mMovie.title);
         description.setText(mMovie.description);
-
         userRating.setText(String.valueOf(mMovie.userRating));
         releaseDate.setText(new SimpleDateFormat("y").format(mMovie.releaseDate));
         Picasso.with(this)

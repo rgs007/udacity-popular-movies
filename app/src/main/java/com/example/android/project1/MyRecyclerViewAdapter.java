@@ -63,14 +63,13 @@ public class MyRecyclerViewAdapter  extends RecyclerView.Adapter<MyRecyclerViewA
     }
 
     class MovieViewHolder extends RecyclerView.ViewHolder {
-
-        //private TextView listItemNumberView;
+		
+		@Bind(R.id.item_image)
         private ImageView mainImage;
 
         public MovieViewHolder(View itemView) {
             super(itemView);
-
-            mainImage= (ImageView) itemView.findViewById(R.id.item_image);
+		Butterknife.bind(this);
         }
     }
 }

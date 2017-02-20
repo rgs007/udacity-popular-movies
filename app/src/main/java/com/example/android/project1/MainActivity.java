@@ -28,6 +28,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MainActivity extends AppCompatActivity {
 
     private static final String BASE_URL_THEMOVIEDB = "http://api.themoviedb.org/3/";
+	
+	@Bind(R.id.rv_main)
     private RecyclerView recyclerView;
     private GridLayoutManager layoutManager;
     private MyRecyclerViewAdapter myAdapter;
@@ -36,16 +38,19 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        
+		super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        recyclerView= (RecyclerView) findViewById(R.id.rv_main);
         recyclerView.setHasFixedSize(true);
         layoutManager = new GridLayoutManager(this,2);
         recyclerView.setLayoutManager(layoutManager);
 
         myAdapter = new MyRecyclerViewAdapter();
         recyclerView.setAdapter(myAdapter);
+		
+		Butterknife.bind(this);
+		
         getMovies();
 
     }

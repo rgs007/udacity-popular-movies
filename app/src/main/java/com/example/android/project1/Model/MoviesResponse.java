@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by rgarc on 15/02/2017.
+ * Created by rgarcia on 15/02/2017.
  */
 
 public class MoviesResponse {
