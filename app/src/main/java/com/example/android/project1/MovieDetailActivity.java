@@ -51,9 +51,31 @@ public class MovieDetailActivity extends AppCompatActivity {
         releaseDate.setText(new SimpleDateFormat("y").format(mMovie.releaseDate));
         Picasso.with(this)
                 .load(BASE_URL_IMAGES + mMovie.imageURL)
-                .into(poster);
+                .into(poster, new Callback() {
+
+            @Override
+            public void onSuccess() {
+
+            }
+
+            @Override
+            public void onError() {
+                poster.setVisibility(View.GONE);
+            }
+        });
         Picasso.with(this)
                 .load(BASE_URL_IMAGES + mMovie.backDropUrl)
-                .into(backdrop);
+                .into(backdrop, new Callback() {
+
+            @Override
+            public void onSuccess() {
+
+            }
+
+            @Override
+            public void onError() {
+                poster.setVisibility(View.GONE);
+            }
+        });
     }
 }
