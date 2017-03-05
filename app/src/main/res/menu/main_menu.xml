@@ -10,5 +10,9 @@
         <item android:id="@+id/action_order_top_rated"
             android:title="@string/action_order_top_rated"
             android:orderInCategory="100" android:checked="false"/>
+        <item android:id="@+id/action_order_favorites"
+            android:orderInCategory="300"
+            android:title="Order by Favorites"
+            android:checked="false"/>
     </group>
 </menu>

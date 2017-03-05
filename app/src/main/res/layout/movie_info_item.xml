@@ -2,4 +2,6 @@
     android:id="@+id/item_image"
     android:adjustViewBounds="true"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"/>
+    android:layout_height="wrap_content"
+    android:scaleType="centerInside"
+    android:cropToPadding="false" />

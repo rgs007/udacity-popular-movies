@@ -5,4 +5,13 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="app_bar_height">180dp</dimen>
     <dimen name="text_margin">16dp</dimen>
+    <dimen name="sections_detail_font_size">20dp</dimen>
+    <dimen name="separator">1dp</dimen>
+    <dimen name="trailer_padding">10dp</dimen>
+    <dimen name="review_padding">10dp</dimen>
+    <dimen name="drawable_padding">4dp</dimen>
+    <dimen name="trailer_height">48dp</dimen>
+    <dimen name="review_height">48dp</dimen>
+    <dimen name="review_author_font_size">16sp</dimen>
+    <dimen name="trailer_name_font_size">16sp</dimen>
 </resources>

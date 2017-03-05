@@ -9,10 +9,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.android.project1.Model.MovieInfo;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * Created by rgarcia on 12/02/2017.
@@ -56,20 +60,20 @@ public class MyRecyclerViewAdapter  extends RecyclerView.Adapter<MyRecyclerViewA
         return movieList == null ? 0 : movieList.size();
     }
 
-    public void setMovieList(MovieInfo.MovieResult movieList) {
+    public void setMovieList(List<MovieInfo> movieList) {
         this.movieList = new ArrayList<>();
-        this.movieList.addAll(movieList.getResults());
+        this.movieList.addAll(movieList);
         notifyDataSetChanged();
     }
 
     class MovieViewHolder extends RecyclerView.ViewHolder {
 		
 		@Bind(R.id.item_image)
-        private ImageView mainImage;
+        protected ImageView mainImage;
 
         public MovieViewHolder(View itemView) {
             super(itemView);
-		Butterknife.bind(this);
+		ButterKnife.bind(this, itemView);
         }
     }
 }

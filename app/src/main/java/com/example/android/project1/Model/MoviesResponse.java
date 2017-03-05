@@ -1,6 +1,5 @@
 package com.example.android.project1.Model;
 
-import com.example.android.project1.MovieInfo;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
