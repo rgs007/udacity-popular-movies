@@ -47,8 +47,11 @@
             tools:textColor="@color/colorAccent" />
             <ImageButton
                 android:id="@+id/movie_favorite"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_favorite_off"
+                tools:background="@android:color/transparent"
+                android:background="@android:color/transparent" />
         </LinearLayout>
         <TextView
             android:id="@+id/movie_description"

@@ -34,6 +34,7 @@ public class MyRecyclerViewAdapter  extends RecyclerView.Adapter<MyRecyclerViewA
         boolean shouldAttachToParentImmediately = false;
         View view = inflater.inflate(layoutIdForListItem, viewGroup, shouldAttachToParentImmediately);
         final MovieViewHolder viewHolder = new MovieViewHolder(view);
+
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -1,5 +1,6 @@
 package com.example.android.project1;
 
+import android.content.ContentResolver;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
@@ -30,6 +31,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+
+import static java.sql.Types.NULL;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -133,8 +136,50 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     private  void getFavoriteMovies() {
-        new MoviesLoadTask().execute();
+        new GetFavoritesMoviesTask().execute();
     }
+
+    public class GetFavoritesMoviesTask extends AsyncTask<Void, Void, ArrayList<MovieInfo>> {
+
+        @Override
+        protected ArrayList<MovieInfo> doInBackground(Void... params) {
+            ContentResolver contentResolver = getContentResolver();
+            Cursor cursor = contentResolver.query(MoviesContract.CONTENT_URI,
+                    null, null, null, null);
+            ArrayList<MovieInfo> favoritesMovies = new ArrayList<MovieInfo>();
+            if(cursor != null && cursor.moveToFirst()) {
+                do {
+                    int id = cursor.getInt(cursor.getColumnIndex(MoviesContract.MoviesEntry.ID));
+                    String title = cursor.getString(
+                            cursor.getColumnIndex(MoviesContract.MoviesEntry.TITLE));
+                    String imageUrl = cursor.getString(
+                            cursor.getColumnIndex(MoviesContract.MoviesEntry.IMAGEURL));
+                    String description = cursor.getString(
+                            cursor.getColumnIndex(MoviesContract.MoviesEntry.DESCRIPTION));
+                    String backdropUrl = cursor.getString(
+                            cursor.getColumnIndex(MoviesContract.MoviesEntry.BACKDROPURL));
+                    double userRating = cursor.getDouble(
+                            cursor.getColumnIndex(MoviesContract.MoviesEntry.USERRATING));
+                    long releaseDate = cursor.getLong(
+                            cursor.getColumnIndex(MoviesContract.MoviesEntry.RELEASEDATE));
+                    MovieInfo movie = new MovieInfo(id, title, imageUrl, description, backdropUrl, userRating, new Date(releaseDate));
+                    favoritesMovies.add(movie);
+                } while (cursor.moveToNext());
+            }
+
+            if(cursor != null) {
+                cursor.close();
+            }
+            return favoritesMovies;
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<MovieInfo> movies) {
+            myAdapter.setMovieList(movies);
+
+        }
+    }
+
 
     private void getMovies() {
 

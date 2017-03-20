@@ -12,7 +12,7 @@
             android:orderInCategory="100" android:checked="false"/>
         <item android:id="@+id/action_order_favorites"
             android:orderInCategory="300"
-            android:title="Order by Favorites"
+            android:title="@string/Favorites"
             android:checked="false"/>
     </group>
 </menu>

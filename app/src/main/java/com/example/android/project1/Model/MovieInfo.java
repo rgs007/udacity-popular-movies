@@ -68,12 +68,12 @@ public class MovieInfo implements Parcelable {
 
     public ContentValues toContentValues() {
         ContentValues values = new ContentValues();
-        values.put(MoviesContract.MoviesEntry.ID, id);
+        values.put(MoviesContract.MoviesEntry.ID, String.valueOf(this.id));
         values.put(MoviesContract.MoviesEntry.TITLE, this.title);
         values.put(MoviesContract.MoviesEntry.DESCRIPTION, this.description);
         values.put(MoviesContract.MoviesEntry.IMAGEURL, this.imageURL);
-        values.put(MoviesContract.MoviesEntry.RELEASEDATE, this.releaseDate.toString());
-        values.put(MoviesContract.MoviesEntry.USERRATING, this.userRating);
+        values.put(MoviesContract.MoviesEntry.RELEASEDATE, String.valueOf(this.releaseDate.getTime()));
+        values.put(MoviesContract.MoviesEntry.USERRATING, String.valueOf(this.userRating));
         values.put(MoviesContract.MoviesEntry.BACKDROPURL, this.backDropUrl);
         return values;
     }

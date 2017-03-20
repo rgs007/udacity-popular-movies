@@ -1,5 +1,8 @@
 package com.example.android.project1;
 
+import android.content.ContentResolver;
+import android.content.ContentValues;
+import android.database.Cursor;
 import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -12,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.android.project1.Database.MoviesContract;
 import com.example.android.project1.Database.MoviesDBHelper;
 import com.example.android.project1.Model.MovieInfo;
 import com.example.android.project1.Model.ReviewInfo;
@@ -38,7 +42,7 @@ public class MovieDetailActivity extends AppCompatActivity {
     private static final String BASE_URL_IMAGES = "http://image.tmdb.org/t/p/w500";
     private static final String BASE_URL_THEMOVIEDB = "http://api.themoviedb.org/3/";
     private MovieInfo mMovie;
-    private MoviesDBHelper dbHelper;
+    ContentResolver contentResolver;
 	
 	@Bind(R.id.backdrop)
     ImageView backdrop;
@@ -52,7 +56,7 @@ public class MovieDetailActivity extends AppCompatActivity {
     TextView userRating;
 	@Bind(R.id.movie_release_date)
     TextView releaseDate;
-    private ImageButton buttonMarkAsNoFavorite;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,13 +67,13 @@ public class MovieDetailActivity extends AppCompatActivity {
         } else {
             throw new IllegalArgumentException(getResources().getString(R.string.error_detail_activity_parceable));
         }
-
+        contentResolver=getContentResolver();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         CollapsingToolbarLayout toolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
         toolbarLayout.setTitle(mMovie.title);
 		ButterKnife.bind(this);
-        dbHelper = new MoviesDBHelper(this);
+
         title.setText(mMovie.title);
         description.setText(mMovie.description);
         userRating.setText(String.valueOf(mMovie.userRating));
@@ -125,21 +129,23 @@ public class MovieDetailActivity extends AppCompatActivity {
     }
 
     private void setButtonMarkAsNotFavorite(ImageButton favoriteButton) {
-
+        favoriteButton.setImageResource(R.drawable.ic_favorite_off);
     }
 
     private void setButtonMarkAsFavorite(ImageButton favoriteButton) {
+        favoriteButton.setImageResource(R.drawable.ic_favorite_on);
     }
 
     private void AddFavorite() {
-        dbHelper.InsertFavoriteMovie(mMovie);
+       contentResolver.insert(MoviesContract.CONTENT_URI, mMovie.toContentValues());
     }
 
     private void RemoveFavorite() {
-        dbHelper.DeleteFavoriteMovie(mMovie);
+        contentResolver.delete(MoviesContract.buildMovieUri(mMovie.id), null, null);
     }
     public boolean isFavorite() {
-       return dbHelper.IsFavorite(mMovie.id);
+        Cursor c = contentResolver.query(MoviesContract.buildMovieUri(mMovie.id),null,null,null,null);
+        return c != null && c.getCount() > 0;
     }
 
     private void GetReviewData(int movieId) {
@@ -257,12 +263,7 @@ public class MovieDetailActivity extends AppCompatActivity {
 
     }
 
-
-
     private void setTextViewReviewVisible(TextView reviewAuthor, TextView reviewText) {
 
     }
-
-
-
 }

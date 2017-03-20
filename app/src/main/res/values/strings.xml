@@ -6,4 +6,5 @@
     <string name="error_detail_activity_parceable">Detail activity must receive a movie parcelable</string>
     <string name="title_reviews">Reviews</string>
     <string name="head_review">Review</string>
+    <string name="Favorites">Favorites</string>
 </resources>

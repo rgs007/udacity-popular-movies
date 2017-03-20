@@ -20,6 +20,10 @@
             android:label="@string/title_activity_movie_detail"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
+        <provider
+            android:name="com.example.android.project1.ContentProviders.MoviesContentProvider"
+            android:authorities="com.popularmovies.data" >
+        </provider>
     </application>
 <uses-permission android:name="android.permission.INTERNET"></uses-permission>
 </manifest>
