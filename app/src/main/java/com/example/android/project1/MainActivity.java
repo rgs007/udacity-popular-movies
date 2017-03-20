@@ -1,6 +1,7 @@
 package com.example.android.project1;
 
 import android.content.ContentResolver;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
@@ -84,11 +85,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         recyclerView= (RecyclerView) findViewById(R.id.rv_main);
         recyclerView.setHasFixedSize(true);
-        layoutManager = new GridLayoutManager(this,2);
+
+        int galleryColumns = getResources().getInteger(R.integer.gallery_columns);
+        layoutManager = new GridLayoutManager(this, galleryColumns);
+
         recyclerView.setLayoutManager(layoutManager);
 
         myAdapter = new MyRecyclerViewAdapter();
         recyclerView.setAdapter(myAdapter);
+
         dbHelper = new MoviesDBHelper(this);
         getMovies();
 

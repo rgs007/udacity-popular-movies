@@ -14,4 +14,6 @@
     <dimen name="review_height">48dp</dimen>
     <dimen name="review_author_font_size">16sp</dimen>
     <dimen name="trailer_name_font_size">16sp</dimen>
+    <integer name="gallery_columns">2</integer>
+
 </resources>
