@@ -42,13 +42,14 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String BASE_URL_THEMOVIEDB = "http://api.themoviedb.org/3/";
     private static final String LOG_TAG = "MainActivity";
+    private static final String SAVED_LAYOUT_MANAGER = "layout-manager-state";
 
     private RecyclerView recyclerView;
     private GridLayoutManager layoutManager;
     private MyRecyclerViewAdapter myAdapter;
     private SortType sortType = SortType.POPULARITY;
     private MoviesDBHelper dbHelper;
-    private int mScrollPosition;
+    private Parcelable mLayoutManagerSavedState = null;
 
     private class MoviesLoadTask extends AsyncTask<Void, Void, Cursor> {
 
@@ -104,23 +105,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        if(layoutManager != null){
-            int count = layoutManager.getChildCount();
-            if(mScrollPosition != RecyclerView.NO_POSITION && mScrollPosition < count){
-                layoutManager.scrollToPosition(mScrollPosition);
-            }
-        }
-    }
-
-    @Override
     protected void onSaveInstanceState(Bundle outState) {
 
         outState.putSerializable("sortType", sortType);
-        if(layoutManager != null && layoutManager instanceof LinearLayoutManager){
-            mScrollPosition = ((LinearLayoutManager) layoutManager).findFirstVisibleItemPosition();
-        }
+        outState.putParcelable(SAVED_LAYOUT_MANAGER, layoutManager.onSaveInstanceState());
+
         super.onSaveInstanceState(outState);
     }
 
@@ -129,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
         super.onRestoreInstanceState(savedInstanceState);
         sortType=(SortType) savedInstanceState.get("sortType");
         getMovies();
-
+        mLayoutManagerSavedState = savedInstanceState.getParcelable(SAVED_LAYOUT_MANAGER);
     }
 
     @Override
@@ -144,21 +133,20 @@ public class MainActivity extends AppCompatActivity {
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.action_order_popularity:
-                item.setChecked(true);
                 sortType = SortType.POPULARITY;
-                getMovies();
-                return true;
+                break;
             case R.id.action_order_top_rated:
-                item.setChecked(true);
                 sortType = SortType.TOP_RATED;
-                getMovies();
-                return true;
+                break;
             case R.id.action_order_favorites:
-                item.setChecked(true);
-                getFavoriteMovies();
+                sortType = SortType.FAVORITES;
+                break;
             default:
                 return super.onOptionsItemSelected(item);
         }
+        item.setChecked(true);
+        getMovies();
+        return true;
     }
     private  void getFavoriteMovies() {
         new GetFavoritesMoviesTask().execute();
@@ -190,6 +178,7 @@ public class MainActivity extends AppCompatActivity {
                     MovieInfo movie = new MovieInfo(id, title, imageUrl, description, backdropUrl, userRating, new Date(releaseDate));
                     favoritesMovies.add(movie);
                 } while (cursor.moveToNext());
+                restorePosition();
             }
 
             if(cursor != null) {
@@ -204,9 +193,31 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
+    /**
+     * Restores scroll position after configuration change.
+     * <p>
+     * <b>NOTE:</b> Must be called after adapter has been set.
+     */
+    private void restorePosition() {
+        if (mLayoutManagerSavedState != null) {
+            layoutManager.onRestoreInstanceState(mLayoutManagerSavedState);
+            mLayoutManagerSavedState = null;
+        }
+    }
 
+    private void getMovies()
+    {
+        switch(sortType)
+        {
+            case FAVORITES:
+                getFavoriteMovies();
+            default:
+                getPopularMovies();
+        }
 
-    private void getMovies() {
+    }
+
+    private void getPopularMovies() {
 
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .build();
@@ -227,7 +238,9 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<MovieInfo.MovieResult> call, Response<MovieInfo.MovieResult> response) {
                 if (response.isSuccessful()) {
                     myAdapter.setMovieList(response.body().getResults());
+                    restorePosition();
                 }
+
             }
             @Override
             public void onFailure(Call<MovieInfo.MovieResult> call, Throwable t) {

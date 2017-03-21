@@ -8,6 +8,7 @@ import java.io.Serializable;
 
 public enum SortType implements Serializable {
 
+        FAVORITES("favorites"),
         POPULARITY("popular"),
         TOP_RATED("top_rated");
 
