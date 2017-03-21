@@ -1,4 +1,4 @@
-package com.example.android.project1.Database;
+package com.example.android.project1.database;
 
 
 import android.content.Context;
@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.example.android.project1.Model.MovieInfo;
+import com.example.android.project1.model.MovieInfo;
 
 /**
  * Created by rgarcia on 05/03/2017.
@@ -35,7 +35,7 @@ public class MoviesDBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        //The database is only on one version so there no need to update
     }
     public Cursor getAllFavoriteMovies() {
         return getReadableDatabase()

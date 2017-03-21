@@ -4,20 +4,23 @@ import android.content.ContentResolver;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.os.AsyncTask;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import com.example.android.project1.Database.MoviesContract;
-import com.example.android.project1.Database.MoviesDBHelper;
-import com.example.android.project1.Model.MovieInfo;
-import com.example.android.project1.Model.SortType;
-import com.example.android.project1.Utils.MovieDBService;
+import com.example.android.project1.database.MoviesContract;
+import com.example.android.project1.database.MoviesDBHelper;
+import com.example.android.project1.model.MovieInfo;
+import com.example.android.project1.model.SortType;
+import com.example.android.project1.utils.MovieDBService;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -38,13 +41,14 @@ import static java.sql.Types.NULL;
 public class MainActivity extends AppCompatActivity {
 
     private static final String BASE_URL_THEMOVIEDB = "http://api.themoviedb.org/3/";
-
+    private static final String LOG_TAG = "MainActivity";
 
     private RecyclerView recyclerView;
     private GridLayoutManager layoutManager;
     private MyRecyclerViewAdapter myAdapter;
     private SortType sortType = SortType.POPULARITY;
     private MoviesDBHelper dbHelper;
+    private int mScrollPosition;
 
     private class MoviesLoadTask extends AsyncTask<Void, Void, Cursor> {
 
@@ -100,8 +104,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        if(layoutManager != null){
+            int count = layoutManager.getChildCount();
+            if(mScrollPosition != RecyclerView.NO_POSITION && mScrollPosition < count){
+                layoutManager.scrollToPosition(mScrollPosition);
+            }
+        }
+    }
+
+    @Override
     protected void onSaveInstanceState(Bundle outState) {
+
         outState.putSerializable("sortType", sortType);
+        if(layoutManager != null && layoutManager instanceof LinearLayoutManager){
+            mScrollPosition = ((LinearLayoutManager) layoutManager).findFirstVisibleItemPosition();
+        }
         super.onSaveInstanceState(outState);
     }
 
@@ -110,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
         super.onRestoreInstanceState(savedInstanceState);
         sortType=(SortType) savedInstanceState.get("sortType");
         getMovies();
+
     }
 
     @Override
@@ -211,7 +231,7 @@ public class MainActivity extends AppCompatActivity {
             }
             @Override
             public void onFailure(Call<MovieInfo.MovieResult> call, Throwable t) {
-
+                Log.e(LOG_TAG,"Error: ", t);
             }
         });
     }

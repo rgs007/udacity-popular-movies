@@ -15,13 +15,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.android.project1.Database.MoviesContract;
-import com.example.android.project1.Database.MoviesDBHelper;
-import com.example.android.project1.Model.MovieInfo;
-import com.example.android.project1.Model.ReviewInfo;
-import com.example.android.project1.Model.TrailerInfo;
-import com.example.android.project1.Utils.MovieDBService;
-import com.example.android.project1.Utils.YoutubeUtil;
+import com.example.android.project1.database.MoviesContract;
+import com.example.android.project1.database.MoviesDBHelper;
+import com.example.android.project1.model.MovieInfo;
+import com.example.android.project1.model.ReviewInfo;
+import com.example.android.project1.model.TrailerInfo;
+import com.example.android.project1.utils.MovieDBService;
+import com.example.android.project1.utils.YoutubeUtil;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -42,7 +42,7 @@ public class MovieDetailActivity extends AppCompatActivity {
     private static final String BASE_URL_IMAGES = "http://image.tmdb.org/t/p/w500";
     private static final String BASE_URL_THEMOVIEDB = "http://api.themoviedb.org/3/";
     private MovieInfo mMovie;
-    ContentResolver contentResolver;
+    private ContentResolver contentResolver;
 	
 	@Bind(R.id.backdrop)
     ImageView backdrop;

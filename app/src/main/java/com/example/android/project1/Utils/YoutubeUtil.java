@@ -1,11 +1,11 @@
-package com.example.android.project1.Utils;
+package com.example.android.project1.utils;
 
 
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 
-public class YoutubeUtil {
+public final class YoutubeUtil {
 
     private final static String YOUTUBE_BASE_URL = "http://www.youtube.com/watch";
     private final static String KEY_PARAM = "v";

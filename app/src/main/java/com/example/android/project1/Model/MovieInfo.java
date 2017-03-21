@@ -1,10 +1,10 @@
-package com.example.android.project1.Model;
+package com.example.android.project1.model;
 
 import android.content.ContentValues;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.example.android.project1.Database.MoviesContract;
+import com.example.android.project1.database.MoviesContract;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;

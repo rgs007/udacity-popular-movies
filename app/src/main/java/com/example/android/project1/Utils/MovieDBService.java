@@ -1,9 +1,9 @@
-package com.example.android.project1.Utils;
+package com.example.android.project1.utils;
 
-import com.example.android.project1.Model.ReviewInfo;
-import com.example.android.project1.Model.SortType;
-import com.example.android.project1.Model.MovieInfo;
-import com.example.android.project1.Model.TrailerInfo;
+import com.example.android.project1.model.ReviewInfo;
+import com.example.android.project1.model.SortType;
+import com.example.android.project1.model.MovieInfo;
+import com.example.android.project1.model.TrailerInfo;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

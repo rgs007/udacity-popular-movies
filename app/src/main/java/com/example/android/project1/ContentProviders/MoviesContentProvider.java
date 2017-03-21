@@ -1,4 +1,4 @@
-package com.example.android.project1.ContentProviders;
+package com.example.android.project1.contentproviders;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
@@ -8,8 +8,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 
-import com.example.android.project1.Database.MoviesContract;
-import com.example.android.project1.Database.MoviesDBHelper;
+import com.example.android.project1.database.MoviesContract;
+import com.example.android.project1.database.MoviesDBHelper;
 
 public class MoviesContentProvider extends ContentProvider {
 
