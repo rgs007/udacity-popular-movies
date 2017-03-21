@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String BASE_URL_THEMOVIEDB = "http://api.themoviedb.org/3/";
     private static final String LOG_TAG = "MainActivity";
     private static final String SAVED_LAYOUT_MANAGER = "layout-manager-state";
+    private static final String SAVED_SORT_TYPE = "sort-type-state";
 
     private RecyclerView recyclerView;
     private GridLayoutManager layoutManager;
@@ -107,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
 
-        outState.putSerializable("sortType", sortType);
+        outState.putSerializable(SAVED_SORT_TYPE, sortType);
         outState.putParcelable(SAVED_LAYOUT_MANAGER, layoutManager.onSaveInstanceState());
 
         super.onSaveInstanceState(outState);
@@ -116,9 +117,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        sortType=(SortType) savedInstanceState.get("sortType");
-        getMovies();
+        sortType=(SortType) savedInstanceState.get(SAVED_SORT_TYPE);
         mLayoutManagerSavedState = savedInstanceState.getParcelable(SAVED_LAYOUT_MANAGER);
+        getMovies();
     }
 
     @Override
@@ -148,51 +149,7 @@ public class MainActivity extends AppCompatActivity {
         getMovies();
         return true;
     }
-    private  void getFavoriteMovies() {
-        new GetFavoritesMoviesTask().execute();
-    }
 
-    public class GetFavoritesMoviesTask extends AsyncTask<Void, Void, ArrayList<MovieInfo>> {
-
-        @Override
-        protected ArrayList<MovieInfo> doInBackground(Void... params) {
-            ContentResolver contentResolver = getContentResolver();
-            Cursor cursor = contentResolver.query(MoviesContract.CONTENT_URI,
-                    null, null, null, null);
-            ArrayList<MovieInfo> favoritesMovies = new ArrayList<MovieInfo>();
-            if(cursor != null && cursor.moveToFirst()) {
-                do {
-                    int id = cursor.getInt(cursor.getColumnIndex(MoviesContract.MoviesEntry.ID));
-                    String title = cursor.getString(
-                            cursor.getColumnIndex(MoviesContract.MoviesEntry.TITLE));
-                    String imageUrl = cursor.getString(
-                            cursor.getColumnIndex(MoviesContract.MoviesEntry.IMAGEURL));
-                    String description = cursor.getString(
-                            cursor.getColumnIndex(MoviesContract.MoviesEntry.DESCRIPTION));
-                    String backdropUrl = cursor.getString(
-                            cursor.getColumnIndex(MoviesContract.MoviesEntry.BACKDROPURL));
-                    double userRating = cursor.getDouble(
-                            cursor.getColumnIndex(MoviesContract.MoviesEntry.USERRATING));
-                    long releaseDate = cursor.getLong(
-                            cursor.getColumnIndex(MoviesContract.MoviesEntry.RELEASEDATE));
-                    MovieInfo movie = new MovieInfo(id, title, imageUrl, description, backdropUrl, userRating, new Date(releaseDate));
-                    favoritesMovies.add(movie);
-                } while (cursor.moveToNext());
-                restorePosition();
-            }
-
-            if(cursor != null) {
-                cursor.close();
-            }
-            return favoritesMovies;
-        }
-
-        @Override
-        protected void onPostExecute(ArrayList<MovieInfo> movies) {
-            myAdapter.setMovieList(movies);
-
-        }
-    }
     /**
      * Restores scroll position after configuration change.
      * <p>
@@ -247,6 +204,51 @@ public class MainActivity extends AppCompatActivity {
                 Log.e(LOG_TAG,"Error: ", t);
             }
         });
+    }
+    private  void getFavoriteMovies() {
+        new GetFavoritesMoviesTask().execute();
+    }
+
+    public class GetFavoritesMoviesTask extends AsyncTask<Void, Void, ArrayList<MovieInfo>> {
+
+        @Override
+        protected ArrayList<MovieInfo> doInBackground(Void... params) {
+            ContentResolver contentResolver = getContentResolver();
+            Cursor cursor = contentResolver.query(MoviesContract.CONTENT_URI,
+                    null, null, null, null);
+            ArrayList<MovieInfo> favoritesMovies = new ArrayList<MovieInfo>();
+            if(cursor != null && cursor.moveToFirst()) {
+                do {
+                    int id = cursor.getInt(cursor.getColumnIndex(MoviesContract.MoviesEntry.ID));
+                    String title = cursor.getString(
+                            cursor.getColumnIndex(MoviesContract.MoviesEntry.TITLE));
+                    String imageUrl = cursor.getString(
+                            cursor.getColumnIndex(MoviesContract.MoviesEntry.IMAGEURL));
+                    String description = cursor.getString(
+                            cursor.getColumnIndex(MoviesContract.MoviesEntry.DESCRIPTION));
+                    String backdropUrl = cursor.getString(
+                            cursor.getColumnIndex(MoviesContract.MoviesEntry.BACKDROPURL));
+                    double userRating = cursor.getDouble(
+                            cursor.getColumnIndex(MoviesContract.MoviesEntry.USERRATING));
+                    long releaseDate = cursor.getLong(
+                            cursor.getColumnIndex(MoviesContract.MoviesEntry.RELEASEDATE));
+                    MovieInfo movie = new MovieInfo(id, title, imageUrl, description, backdropUrl, userRating, new Date(releaseDate));
+                    favoritesMovies.add(movie);
+                } while (cursor.moveToNext());
+                restorePosition();
+            }
+
+            if(cursor != null) {
+                cursor.close();
+            }
+            return favoritesMovies;
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<MovieInfo> movies) {
+            myAdapter.setMovieList(movies);
+
+        }
     }
 
 }
